@@ -40,4 +40,5 @@ public class Constants {
 	public static final String EIGHTY_DOLLARS_LABEL = "$80";
 	public static final String ONE_HUNDRED_DOLLARS_LABEL = "$100";
 	public static final String TWO_HUNDRED_DOLLARS_LABEL = "$200";
+	public static final String TRANSFER_AMOUNT_LABEL = "Amount of Transfer";
 }
