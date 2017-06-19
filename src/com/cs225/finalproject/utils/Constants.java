@@ -15,7 +15,7 @@ public class Constants {
 	public static final String ADDITIONAL_OPTIONS_LABEL = "Additional Options";
 	public static final String CHANGE_PIN_LABEL = "Change PIN";
 	public static final String GET_BALANCE_LABEL = "Get Balance";
-	public static final String VIEW_TRANSACTION_HISTORY_LABEL = "View Transaction History Label";
+	public static final String VIEW_TRANSACTION_HISTORY_LABEL = "View Transaction History";
 	public static final String FILE_LABEL = "File";
 	public static final String OPTIONS_LABEL = "Options";
 	public static final String HELP_LABEL = "Help";
@@ -23,10 +23,13 @@ public class Constants {
 	public static final String CONTACT_US_LABEL = "Contact Us";
 	public static final String CONFIRM_LABEL = "Confirm";
 	public static final String CANCEL_LABEL = "Cancel";
+	public static final String EXIT_LABEL = "Exit";
+	public static final String LOGOUT_LABEL = "Log Out";
+	public static final String LOGIN_LABEL = "Log In";
+	public static final String CREATE_NEW_ACCOUNT_LABEL = "Create New Account";
 //	public static final String 
 //	public static final String 
 //	public static final String 
-//	public static final String 
-//	public static final String 
-//	public static final String 
+	public static final String ACCOUNT_NUMBER_LABEL = "Account Number";
+	public static final String ACCOUNT_PIN_LABEL = "Account PIN";
 }
