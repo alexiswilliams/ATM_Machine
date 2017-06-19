@@ -91,15 +91,6 @@ public class MainStage extends Application {
 	/**
 	 * depositScene
 		description: Used to get the user input for deposit for their account
-		nodes:
-			buttons:
-				confirmButton
-				cancelButton
-			textFields:
-				depositAmountInput
-			labels:
-				depositAmountLabel
-
 	 * @return
 	 */
 	private Scene getDepositScene() {
@@ -280,8 +271,50 @@ buttons:
 	}
 
 	private Scene getChangePinScene() {
+		// Nodes needed for scene: buttons, labels, text fields
+		Button confirmButton, cancelButton;
+		Label accountPinLabel, accountPinLabelNew;
+		TextField accountPinInput, accountPinInputNew;
 
-		return null;
+		confirmButton = new Button(Constants.CONFIRM_LABEL);
+		cancelButton = new Button(Constants.CANCEL_LABEL);
+
+		// Create labels for scene
+		accountPinLabel = new Label(Constants.ACCOUNT_PIN_LABEL);
+		accountPinLabelNew = new Label(Constants.ACCOUNT_PIN_LABEL_NEW);
+
+		// Create inputs for scene
+		accountPinInput = new TextField();
+		accountPinInput.setPromptText(Constants.ACCOUNT_PIN_LABEL);
+		accountPinInputNew = new TextField();
+		accountPinInputNew.setPromptText(Constants.ACCOUNT_PIN_LABEL_NEW);
+
+		GridPane grid = getGridPane();
+
+		// assign nodes to GridPane
+		GridPane.setConstraints(accountPinLabel, 0, 0);
+		GridPane.setConstraints(accountPinInput, 1, 0);
+		GridPane.setConstraints(accountPinLabelNew, 0, 1);
+		GridPane.setConstraints(accountPinInputNew, 1, 1);
+		GridPane.setConstraints(confirmButton, 0, 2);
+		GridPane.setConstraints(cancelButton, 1, 2);
+
+		grid.getChildren().addAll(
+				accountPinLabel, accountPinLabelNew, accountPinInput, accountPinInputNew, confirmButton, cancelButton);
+
+		// event handler
+		confirmButton.setOnAction(e -> {
+			//			buildScene(Constants.DEPOSIT_LABEL);
+			//			updateTopBorder(menuBar);
+		});
+
+		BorderPane borderPane = new BorderPane();
+		borderPane.setTop(getMenuBarLoggedIn());
+		borderPane.setCenter(grid);
+
+		Scene scene = new Scene(borderPane);
+
+		return scene;
 	}
 
 	private MenuBar getMenuBarLoggedIn() {
@@ -371,7 +404,8 @@ buttons:
 
 		//		Scene scene = getDepositScene();
 //		Scene scene = getLoginScene();
-		Scene scene = getTransferFundsScene();
+//		Scene scene = getTransferFundsScene();
+		Scene scene = getChangePinScene();
 		//		Scene scene = getWithdrawalScene();
 		// Add the menubar and shapes 
 		//		borderPane.setTop(menuBar);
