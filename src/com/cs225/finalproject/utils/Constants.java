@@ -10,6 +10,7 @@ public class Constants {
 	public static final String VIEW_TRANSACTION_HISTORY_TOOLTIP = "View all transactions of bank account";
 	public static final String LOGIN_BUTTON_TOOLTIP = "Log into bank account using ATM # and account PIN";
 	public static final String DEPOSIT_LABEL = "Deposit"; 
+	public static final String DEPOSIT_AMOUNT_LABEL = "Deposit Amount";
 	public static final String WITHDRAWAL_LABEL = "Withdrawal";
 	public static final String TRANSFER_FUNDS_LABEL = "Transfer Funds";
 	public static final String ADDITIONAL_OPTIONS_LABEL = "Additional Options";
@@ -32,4 +33,11 @@ public class Constants {
 //	public static final String 
 	public static final String ACCOUNT_NUMBER_LABEL = "Account Number";
 	public static final String ACCOUNT_PIN_LABEL = "Account PIN";
+	public static final String WITHDRAWAL_AMOUNT_LABEL = "Withdrawal Amount";
+	public static final String TWENTY_DOLLARS_LABEL = "$20";
+	public static final String FOURTY_DOLLARS_LABEL = "$40";
+	public static final String SIXTY_DOLLARS_LABEL = "$60";
+	public static final String EIGHTY_DOLLARS_LABEL = "$80";
+	public static final String ONE_HUNDRED_DOLLARS_LABEL = "$100";
+	public static final String TWO_HUNDRED_DOLLARS_LABEL = "$200";
 }
