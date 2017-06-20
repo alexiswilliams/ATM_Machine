@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.cs225.finalproject.utils.Constants;
+import com.cs225.finalproject.utils.Validation;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -30,13 +31,13 @@ public class Account {
 
 	public Account() throws IOException {
 		reader = new CSVReader(new FileReader(EAGLE_BANK_ACCOUNTS_FILE));
-
+		accounts = new ArrayList<>();
+		
 		//Read all rows at once
 		List<String[]> allRows = reader.readAll();
 
 		//Read CSV line by line and use the string array as you want
 		if(allRows != null && !allRows.isEmpty()) {
-			accounts = new ArrayList<>();
 
 			for(String[] row : allRows){
 				Account account = new Account(Integer.parseInt(row[0]), Integer.parseInt(row[1]), Integer.parseInt(row[2]));
@@ -46,10 +47,10 @@ public class Account {
 	}
 
 	public void createNewAccount(int acctNumber, int acctPin) throws DatabaseException, IOException {
-		if(Integer.toString(acctNumber).length() != 8) {
+		if(!Validation.hasValidAccountNumber(acctNumber)) {
 			throw new DatabaseException(Constants.ACCOUNT_NUMBER_LABEL + " must be 8 digits long.");
 		}
-		if(Integer.toString(acctPin).length() != 4) {
+		if(!Validation.hasValidPinNumber(acctPin)) {
 			throw new DatabaseException(Constants.ACCOUNT_PIN_LABEL + " must be 4 digits long");
 		}
 		for(Account acct :accounts) {
@@ -65,6 +66,9 @@ public class Account {
 		writer.writeNext(record);
 
 		writer.close();
+		
+		AccountHistory accountHistoryFile = new AccountHistory();
+		accountHistoryFile.createAccountHistoryFile(acctNumber);
 	}
 
 	public Account getAccount(int acctNumber, int acctPin) {

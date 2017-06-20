@@ -3,7 +3,6 @@ package com.cs225.finalproject.ui;
 import com.cs225.finalproject.driver.ContactUs;
 import com.cs225.finalproject.driver.Faq;
 import com.cs225.finalproject.utils.Constants;
-import com.cs225.finalproject.utils.HelpItem;
 
 import javafx.application.Application;
 import javafx.application.Platform;

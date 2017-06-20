@@ -2,12 +2,14 @@ package com.cs225.finalproject.database;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 public class AccountHistory {
 	/*
@@ -21,14 +23,31 @@ public class AccountHistory {
 	private int balance;
 	private String transaction;
 	private ArrayList<AccountHistory> accountHistoryRecords;
+	private CSVWriter writer;
 	private static final String ACCOUNT_HISTORY_FILE = "acct{0}.txt";
 	private static CSVReader reader;
 
-	public AccountHistory(int acctNumber) {
+	private String getFileName(int acctNumber) {
+		return ACCOUNT_HISTORY_FILE.replace("{0}", String.valueOf(acctNumber));
+	}
+	
+	public void createAccountHistoryFile(int acctNumber) throws IOException {
+		writer = new CSVWriter(new FileWriter(getFileName(acctNumber)));
 
+		writer.writeNext(null);
+
+		writer.close();	
+	}
+	
+	public AccountHistory() {}
+	
+	public AccountHistory(int acctNumber) {
 		accountHistoryRecords = new ArrayList<>();
-		String fileName = ACCOUNT_HISTORY_FILE.replace("{0}", String.valueOf(acctNumber));
+		
+		String fileName = getFileName(acctNumber);
+		
 		System.out.println("fileName: " + fileName);
+		
 		try {
 			reader = new CSVReader(new FileReader(fileName));
 
@@ -44,6 +63,8 @@ public class AccountHistory {
 					accountHistoryRecords.add(accountHistoryRecord);
 				}	
 			}
+			
+			reader.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
