@@ -1,6 +1,7 @@
 package com.cs225.finalproject.utils;
 
 public class Constants {
+	public static final String TITLE = "Eagle Bank";
 	public static final String DEPOSIT_HELP = "Add funds to bank account";
 	public static final String WITHDRAWAL_HELP = "Extract funds from bank account";
 	public static final String TRANSFER_FUNDS_HELP = "Move funds from bank account to another specified bank account using account number and PIN";
@@ -30,9 +31,6 @@ public class Constants {
 	public static final String LOGIN_LABEL = "Log In";
 	public static final String HOME_LABEL = "Home";
 	public static final String CREATE_NEW_ACCOUNT_LABEL = "Create New Account";
-//	public static final String 
-//	public static final String 
-//	public static final String 
 	public static final String ACCOUNT_NUMBER_LABEL = "Account Number";
 	public static final String ACCOUNT_PIN_LABEL = "Account PIN";
 	public static final String WITHDRAWAL_AMOUNT_LABEL = "Withdrawal Amount";
