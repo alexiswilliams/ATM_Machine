@@ -6,7 +6,7 @@ public class Constants {
 	public static final String TRANSFER_FUNDS_HELP = "Move funds from bank account to another specified bank account using account number and PIN";
 	public static final String GET_BALANCE_HELP = "View current balance of your bank account";
 	public static final String CHANGE_PIN_HELP = "Change the current PIN number for bank account";
-	public static final String CREATE_ACCOUNT_HELP = "Create new Eagle Bank account using an ATM # that is 16 digits long, unique, and an ATM PIN that is 4 digits long";
+	public static final String CREATE_ACCOUNT_HELP = "Create new Eagle Bank account using an ATM # that is 8 digits long, unique, and an ATM PIN that is 4 digits long";
 	public static final String VIEW_TRANSACTION_HISTORY_HELP = "View all transactions of bank account";
 	public static final String LOGIN_HELP = "Log into bank account using ATM # and account PIN";
 	public static final String DEPOSIT_LABEL = "Deposit"; 

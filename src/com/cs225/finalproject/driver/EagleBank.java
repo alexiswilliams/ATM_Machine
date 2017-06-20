@@ -12,7 +12,7 @@ public class EagleBank extends MainStage{
 		MainStage.launch(args);
 		Account bankVault = new Account();
 		
-		Account acct = bankVault.getAccount(1111222233336666L, 1234);
+		Account acct = bankVault.getAccount(11111111, 1234);
 		
 		System.out.println(acct.toString());
 	}
