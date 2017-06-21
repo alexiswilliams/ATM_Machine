@@ -1,5 +1,9 @@
 package com.cs225.finalproject.ui;
 
+import java.io.IOException;
+
+import com.cs225.finalproject.database.DatabaseException;
+import com.cs225.finalproject.driver.EagleBankController;
 import com.cs225.finalproject.utils.Constants;
 
 import javafx.application.Application;
@@ -32,9 +36,12 @@ public class MainStage extends Application {
 	private Scene
 	loginScene, mainMenuScene, depositScene, transferFundsScene,
 	changePinScene, createNewAccount, withdrawalScene, faqScene, mainScene;
+	
+	private EagleBankController controller;
 
-	public MainStage() {
+	public MainStage() throws IOException {
 		//		buildScene(Constants.LOGIN_LABEL);
+		controller = new EagleBankController();
 	}
 
 	private GridPane getGridPane() {
@@ -93,9 +100,19 @@ public class MainStage extends Application {
 
 		// event handler
 		loginButton.setOnAction(e -> {
-			//			TODO buildScene(Constants.DEPOSIT_LABEL);
-			//			TODO updateTopBorder(menuBar);
-			returnToMainScene(mainStage);
+			try {
+				controller.login(Integer.valueOf(accountNumberInput.getText()), Integer.valueOf(accountPinInput.getText()));
+				//			TODO buildScene(Constants.DEPOSIT_LABEL);
+				//			TODO updateTopBorder(menuBar);
+				mainStage.setScene(getMainMenuScene(mainStage));
+			} catch (NumberFormatException | DatabaseException e1) {
+				ErrorMessage.display(e1.getMessage());
+				// TODO 1. open error alert box with message from e1.getMessage();
+				e1.printStackTrace();
+				System.out.println("errormessage: " + e1.getMessage());
+				System.out.println(Integer.valueOf(accountNumberInput.getText()));
+				System.out.println(Integer.valueOf(accountPinInput.getText()));
+			}
 		});
 
 		BorderPane borderPane = new BorderPane();
@@ -127,9 +144,9 @@ public class MainStage extends Application {
 		// initializing Labels
 		mainMenuLabel = new Label(Constants.MAIN_MENU_LABEL);
 		// TODO insert stub method to add user accountNumber
-		accountNumberLabel = new Label("Account Number: ");
+		accountNumberLabel = new Label("Account Number: " + controller.getAccountNumber());
 		// TODO insert stub method to add currentBalance
-		currentBalanceLabel = new Label("$ ");
+		currentBalanceLabel = new Label("$ " + controller.getAccountBalanace());
 		// TODO insert stub method to add getTransactionHistory(history);
 		currentTransactionHistory = new Label();
 		
@@ -143,6 +160,18 @@ public class MainStage extends Application {
 		
 		// create event handlers
 		changePinButton.setOnAction(changePin -> mainStage.setScene(changePinScene));
+		depositButton.setOnAction(deposit -> mainStage.setScene(getDepositScene(mainStage)));
+		logOutButton.setOnAction(e -> {
+			try {
+				controller.logout();
+
+				mainStage.setScene(getLoginScene(mainStage));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				ErrorMessage.display(e1.getMessage());
+			}
+		});
 //		createNewAccount.setOnAction(createNewAccount -> mainStage.setScene());
 		
 		// assigning buttons to VBox panes
@@ -195,7 +224,11 @@ public class MainStage extends Application {
 		confirmButton.setOnAction(e -> {
 			//			buildScene(Constants.DEPOSIT_LABEL);
 			//			updateTopBorder(menuBar);
+			controller.deposit(Integer.valueOf(depositAmountInput.getText()));
+			mainStage.setScene(getMainMenuScene(mainStage));
 		});
+		
+		cancelButton.setOnAction(cancel -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
 		borderPane.setTop(getMenuBarLoggedIn(mainStage));

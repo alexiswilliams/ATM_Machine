@@ -20,6 +20,10 @@ public class EagleBankController {
 		currentTransactions = new ArrayList<>();
 	}
 	
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+	
 	public int getAccountBalanace() {
 		AccountHistory accountVault = new AccountHistory(accountNumber);
 		int currBalance = 0;

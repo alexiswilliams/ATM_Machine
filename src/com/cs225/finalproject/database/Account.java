@@ -73,6 +73,7 @@ public class Account {
 
 	public Account getAccount(int acctNumber, int acctPin) {
 		for(Account acct :accounts) {
+			System.out.println(acct.getAccountNumber() + ":" + acct.getAccountPin());
 			if(acct.getAccountNumber() == acctNumber && acct.getAccountPin() == acctPin) {
 				return acct;
 			}
