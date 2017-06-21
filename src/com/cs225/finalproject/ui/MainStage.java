@@ -1,14 +1,11 @@
 package com.cs225.finalproject.ui;
 
-import com.cs225.finalproject.driver.ContactUs;
-import com.cs225.finalproject.driver.Faq;
 import com.cs225.finalproject.utils.Constants;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 /*
@@ -32,8 +30,8 @@ public class MainStage extends Application {
 
 	//	private BorderPane borderPane;
 	private Scene
-	loginScene, depositScene, transferFundsScene,
-	changePinScene, withdrawalScene, faqScene, mainScene;
+	loginScene, mainMenuScene, depositScene, transferFundsScene,
+	changePinScene, createNewAccount, withdrawalScene, faqScene, mainScene;
 
 	public MainStage() {
 		//		buildScene(Constants.LOGIN_LABEL);
@@ -90,12 +88,13 @@ public class MainStage extends Application {
 		GridPane.setConstraints(createAccountButton, 1, 2);
 
 		grid.getChildren().addAll(
-				accountNumberLabel, accountNumberInput, accountPinLabel, accountPinInput, loginButton, createAccountButton);
+				accountNumberLabel, accountNumberInput, accountPinLabel,
+				accountPinInput, loginButton, createAccountButton);
 
 		// event handler
 		loginButton.setOnAction(e -> {
-			//			buildScene(Constants.DEPOSIT_LABEL);
-			//			updateTopBorder(menuBar);
+			//			TODO buildScene(Constants.DEPOSIT_LABEL);
+			//			TODO updateTopBorder(menuBar);
 			returnToMainScene(mainStage);
 		});
 
@@ -113,6 +112,60 @@ public class MainStage extends Application {
 	 * @param mainStage 
 	 * @return
 	 */
+
+	private Scene getMainMenuScene(Stage mainStage) {
+		Label mainMenuLabel, accountNumberLabel,
+		currentBalanceLabel, currentTransactionHistory;
+		Button
+		changePinButton, createNewAccount, logOutButton,
+		depositButton, witdrawalButton, transferFundsButton;
+		VBox optionButtons = new VBox(10);
+		VBox menuButtons = new VBox(20);
+		VBox statusBar = new VBox();
+		BorderPane mainMenuLayout = new BorderPane();
+		
+		// initializing Labels
+		mainMenuLabel = new Label(Constants.MAIN_MENU_LABEL);
+		// TODO insert stub method to add user accountNumber
+		accountNumberLabel = new Label("Account Number: ");
+		// TODO insert stub method to add currentBalance
+		currentBalanceLabel = new Label("$ ");
+		// TODO insert stub method to add getTransactionHistory(history);
+		currentTransactionHistory = new Label();
+		
+		// initializing Buttons
+		changePinButton = createButton(Constants.CHANGE_PIN_LABEL, Constants.CHANGE_PIN_HELP);
+		createNewAccount = createButton(Constants.CREATE_NEW_ACCOUNT_LABEL, Constants.CREATE_ACCOUNT_HELP);
+		logOutButton = new Button(Constants.LOGOUT_LABEL);
+		depositButton = createButton(Constants.DEPOSIT_LABEL, Constants.DEPOSIT_HELP);
+		witdrawalButton = createButton(Constants.WITHDRAWAL_LABEL, Constants.WITHDRAWAL_HELP);
+		transferFundsButton = createButton(Constants.TRANSFER_FUNDS_LABEL, Constants.TRANSFER_FUNDS_HELP);
+		
+		// create event handlers
+		changePinButton.setOnAction(changePin -> mainStage.setScene(changePinScene));
+//		createNewAccount.setOnAction(createNewAccount -> mainStage.setScene());
+		
+		// assigning buttons to VBox panes
+		optionButtons.getChildren().addAll(changePinButton, createNewAccount, logOutButton);
+		menuButtons.getChildren().addAll(mainMenuLabel, depositButton, witdrawalButton, transferFundsButton);
+		statusBar.getChildren().addAll(accountNumberLabel, currentBalanceLabel, currentTransactionHistory);
+		
+		// align VBox in the center of their locations
+		optionButtons.setAlignment(Pos.CENTER);
+		menuButtons.setAlignment(Pos.CENTER);
+		statusBar.setAlignment(Pos.TOP_LEFT);
+		
+		// embedding VBox panes into BorderPane
+		mainMenuLayout.setTop(getMenuBarLoggedIn(mainStage));
+		mainMenuLayout.setLeft(optionButtons);
+		mainMenuLayout.setCenter(menuButtons);
+		mainMenuLayout.setRight(statusBar);
+		
+		Scene scene = new Scene(mainMenuLayout);
+		
+		return scene;
+	}
+	
 	private Scene getDepositScene(Stage mainStage) {
 		Button confirmButton, cancelButton;
 		Label depositAmountLabel;
@@ -274,11 +327,6 @@ buttons:
 		return scene;
 	}
 
-	private Scene getMainScene(Stage mainStage) {
-
-		return null;
-	}
-
 	private Scene getAdditionalOptionsScene() {
 
 		return null;
@@ -289,10 +337,10 @@ buttons:
 		return null;
 	}
 
-	private Scene getCurrentBalanceScene() {
-
-		return null;
-	}
+//	private Scene getCurrentBalanceScene() {
+//
+//		return null;
+//	}
 
 	private Scene getFaqScene(Stage mainStage) {
 		// Nodes needed for scene: buttons, labels, text fields
@@ -398,6 +446,49 @@ buttons:
 		return scene;
 	}
 
+	private Scene getCreateNewAccount(Stage mainStage) {
+		Label accountNumberLabel, accountPinLabel;
+
+		Button cancelButton = createButton(Constants.CANCEL_LABEL, Constants.CANCEL_HELP);
+		Button createAccountButton = createButton(Constants.CREATE_NEW_ACCOUNT_LABEL, Constants.CREATE_ACCOUNT_HELP);
+
+		// Create labels for login scene
+		accountNumberLabel = new Label(Constants.ACCOUNT_NUMBER_LABEL);
+		accountPinLabel = new Label(Constants.ACCOUNT_PIN_LABEL);
+
+		// Create inputs for login scene
+		TextField accountNumberInput = createTextField(Constants.ACCOUNT_NUMBER_LABEL);
+		TextField accountPinInput = createTextField(Constants.ACCOUNT_PIN_LABEL);
+
+		GridPane grid = getGridPane();
+
+		// assign nodes to GridPane
+		GridPane.setConstraints(accountNumberLabel, 0, 0);
+		GridPane.setConstraints(accountNumberInput, 1, 0);
+		GridPane.setConstraints(accountPinLabel, 0, 1);
+		GridPane.setConstraints(accountPinInput, 1, 1);
+		GridPane.setConstraints(cancelButton, 0, 2);
+		GridPane.setConstraints(createAccountButton, 1, 2);
+
+		grid.getChildren().addAll(
+				accountNumberLabel, accountNumberInput, accountPinLabel, accountPinInput, cancelButton, createAccountButton);
+
+		// event handler
+		cancelButton.setOnAction(e -> {
+			//			buildScene(Constants.DEPOSIT_LABEL);
+			//			updateTopBorder(menuBar);
+			returnToMainScene(mainStage);
+		});
+
+		BorderPane borderPane = new BorderPane();
+		borderPane.setTop(getMenuBarLoggedIn(mainStage));
+		borderPane.setCenter(grid);
+
+		Scene scene = new Scene(borderPane);
+
+		return scene;
+	}
+
 	private MenuBar getMenuBarLoggedIn(Stage mainStage) {
 		// Create MenuBar
 		MenuBar menuBar = new MenuBar();
@@ -443,18 +534,17 @@ buttons:
 		 * NEED GET BALANCE BUTTON AND POPUP SCENE
 		 */
 		// disable close button
-		exitMenuItem.setOnAction(e -> Platform.exit());
+		exitMenuItem.setOnAction(exit -> Platform.exit());
 		// logout sequence
-		logoutMenuItem.setOnAction(e -> returnToLoginScene(mainStage));
+		logoutMenuItem.setOnAction(logout -> returnToLoginScene(mainStage));
 		// change scene to change pin scene
-		changePinMenuItem.setOnAction(e -> mainStage.setScene(changePinScene));
+		changePinMenuItem.setOnAction(changePin -> mainStage.setScene(changePinScene));
 		// change scene to create new account scene
-//		createNewAccountMenuItem.setOnAction(e -> mainStage.setScene(createNewAccount));
+		createNewAccountMenuItem.setOnAction(e -> mainStage.setScene(createNewAccount));
 		// display contact scene
-		contactUsMenuItem.setOnAction(e -> ContactUs.display());
-
+		contactUsMenuItem.setOnAction(contactUs -> ContactUs.display());
 		// display faq scene
-		faqMenuItem.setOnAction(e -> Faq.display());
+		faqMenuItem.setOnAction(FAQ -> Faq.display());
 
 		return menuBar;
 
@@ -483,17 +573,17 @@ buttons:
 		menuBarLoginScreen.getMenus().addAll(fileMenu, optionsMenu, helpMenu);
 
 		// terminate program
-		exitMenuItem.setOnAction(e -> Platform.exit());
+		exitMenuItem.setOnAction(exit -> Platform.exit());
 		// display contact scene
-		contactUsMenuItem.setOnAction(e -> ContactUs.display());
+		contactUsMenuItem.setOnAction(contactUs -> ContactUs.display());
 		// display faq scene
-		faqMenuItem.setOnAction(e -> Faq.display());
+		faqMenuItem.setOnAction(FAQ -> Faq.display());
 
 		return menuBarLoginScreen;
 	}
 
 	public void returnToMainScene(Stage mainStage) {
-		mainStage.setScene(depositScene);
+		mainStage.setScene(mainMenuScene);
 	}
 
 	public void returnToLoginScene(Stage mainStage) {
@@ -513,9 +603,10 @@ buttons:
 		depositScene = getDepositScene(mainStage);
 		transferFundsScene = getTransferFundsScene(mainStage);
 		changePinScene = getChangePinScene(mainStage);
+		createNewAccount = getCreateNewAccount(mainStage);
 		withdrawalScene = getWithdrawalScene(mainStage);
 		faqScene = getFaqScene(mainStage);
-		mainScene = getMainScene(mainStage);
+		mainMenuScene = getMainMenuScene(mainStage);
 
 		// Add the menubar and shapes 
 		//		borderPane.setTop(menuBar);

@@ -44,4 +44,6 @@ public class Constants {
 	public static final String ACCOUNT_NUMBER_LABEL_NEW = "New " + ACCOUNT_NUMBER_LABEL;
 	public static final String ACCOUNT_PIN_LABEL_NEW = "New " + ACCOUNT_PIN_LABEL;
 	public static final String OK_LABEL = "Ok";
+	public static final String CANCEL_HELP = "Go back to the Main Scene";
+	public static final String MAIN_MENU_LABEL = "Main Menu";
 }
