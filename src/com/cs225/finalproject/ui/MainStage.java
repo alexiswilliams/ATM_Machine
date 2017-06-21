@@ -33,9 +33,10 @@ import javafx.stage.Stage;
 //@SuppressWarnings("unused")
 public class MainStage extends Application {
 
-	private EagleBankController controller;
 
-	public MainStage() throws IOException {
+	private EagleBankController controller;
+	
+  public MainStage() throws IOException {
 		//		buildScene(Constants.LOGIN_LABEL);
 		controller = new EagleBankController();
 	}
@@ -143,11 +144,8 @@ public class MainStage extends Application {
 		
 		// initializing Labels
 		mainMenuLabel = new Label(Constants.MAIN_MENU_LABEL);
-		// TODO insert stub method to add user accountNumber
 		accountNumberLabel = new Label("Account Number: " + controller.getAccountNumber());
-		// TODO insert stub method to add currentBalance
 		currentBalanceLabel = new Label("$ " + controller.getAccountBalanace());
-		// TODO insert stub method to add getTransactionHistory(history);
 		currentTransactionHistory = new Label(controller.getCurrentTransactions());
 		
 		// initializing Buttons
@@ -264,7 +262,7 @@ public class MainStage extends Application {
 			controller.deposit(Integer.valueOf(depositAmountInput.getText()));
 			mainStage.setScene(getMainMenuScene(mainStage));
 		});
-		
+    
 		cancelButton.setOnAction(cancel -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
@@ -356,6 +354,7 @@ buttons:
 				ErrorMessage.display(e1.getMessage());
 			}
 		});
+    
 		cancelButton.setOnAction(cancel -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
@@ -410,10 +409,6 @@ buttons:
 				cancelButton, confirmButton);
 
 		// event handler
-		//		loginButton.setOnAction(e -> {
-		//			//			buildScene(Constants.DEPOSIT_LABEL);
-		//			//			updateTopBorder(menuBar);
-		//		});
 		cancelButton.setOnAction(cancel -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
@@ -473,6 +468,7 @@ buttons:
 			//			buildScene(Constants.DEPOSIT_LABEL);
 			//			updateTopBorder(menuBar);
 		});
+    
 		cancelButton.setOnAction(cancel -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
@@ -635,7 +631,7 @@ buttons:
 		mainStage.setResizable(false);
 		mainStage.setOnCloseRequest(e -> e.consume());
 
-		Scene loginScene = getLoginScene(mainStage);
+    Scene loginScene = getLoginScene(mainStage);
 		Scene depositScene = getDepositScene(mainStage);
 		Scene transferFundsScene = getTransferFundsScene(mainStage);
 		Scene changePinScene = getChangePinScene(mainStage);
