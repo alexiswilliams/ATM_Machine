@@ -5,12 +5,16 @@ package com.cs225.finalproject.database;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.cs225.finalproject.utils.Constants;
+import com.cs225.finalproject.utils.Validation;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 /**
  * @author pariswilliams
@@ -19,56 +23,65 @@ import com.opencsv.CSVReader;
 public class Account {
 	private static final String EAGLE_BANK_ACCOUNTS_FILE = "EagleBank.txt";
 	private static CSVReader reader;
-	private double accountNumber;
+	private static CSVWriter writer;
+	private int accountNumber;
 	private int accountPin;
 	private int numberOfTransactions;
 	private ArrayList<Account> accounts;
 
 	public Account() throws IOException {
 		reader = new CSVReader(new FileReader(EAGLE_BANK_ACCOUNTS_FILE));
-
+		accounts = new ArrayList<>();
+		
 		//Read all rows at once
 		List<String[]> allRows = reader.readAll();
 
 		//Read CSV line by line and use the string array as you want
 		if(allRows != null && !allRows.isEmpty()) {
-			accounts = new ArrayList<>();
-			
+
 			for(String[] row : allRows){
-				Account account = new Account(Double.parseDouble(row[0]), Integer.parseInt(row[1]), Integer.parseInt(row[2]));
+				Account account = new Account(Integer.parseInt(row[0]), Integer.parseInt(row[1]), Integer.parseInt(row[2]));
 				accounts.add(account);
 			}	
 		}
 	}
-	
-	public void createNewAccount(double acctNumber, int acctPin) {
-		if(Double.toString(acctNumber).length() != 16) {
-			
+
+	public void createNewAccount(int acctNumber, int acctPin) throws DatabaseException, IOException {
+		if(!Validation.hasValidAccountNumber(acctNumber)) {
+			throw new DatabaseException(Constants.ACCOUNT_NUMBER_LABEL + " must be 8 digits long.");
 		}
-		if(Integer.toString(acctPin).length() != 4) {
-			
+		if(!Validation.hasValidPinNumber(acctPin)) {
+			throw new DatabaseException(Constants.ACCOUNT_PIN_LABEL + " must be 4 digits long");
 		}
 		for(Account acct :accounts) {
 			if(acct.getAccountNumber() == acctNumber) {
-				break;
-				//TODO create an exception here for matching account numbers
+				throw new DatabaseException(Constants.ACCOUNT_NUMBER_LABEL + " must be unique");
 			}
 		}
+
+		writer = new CSVWriter(new FileWriter(EAGLE_BANK_ACCOUNTS_FILE, true));
+
+		String [] record = String.valueOf(acctNumber).concat(",").concat(String.valueOf(acctPin)).concat(",0").split(",");
+
+		writer.writeNext(record);
+
+		writer.close();
 		
-		//TODO create method to add account to accounts and write to file
+		AccountHistory accountHistoryFile = new AccountHistory();
+		accountHistoryFile.createAccountHistoryFile(acctNumber);
 	}
-	
-	public Account getAccount(double acctNumber, int acctPin) {
+
+	public Account getAccount(int acctNumber, int acctPin) {
 		for(Account acct :accounts) {
 			if(acct.getAccountNumber() == acctNumber && acct.getAccountPin() == acctPin) {
 				return acct;
 			}
 		}
-		
+
 		return null;
 	}
-	
-	public Account(double acctNumber, int acctPin, int numTransactions) {
+
+	public Account(int acctNumber, int acctPin, int numTransactions) {
 		this.accountNumber = acctNumber;
 		this.accountPin = acctPin;
 		this.numberOfTransactions = numTransactions;
@@ -91,7 +104,7 @@ public class Account {
 	/**
 	 * @return the accountNumber
 	 */
-	public double getAccountNumber() {
+	public int getAccountNumber() {
 		return accountNumber;
 	}
 
