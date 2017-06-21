@@ -1,3 +1,4 @@
-11111111,1234,100,Deposit
-11111111,1234,80,Withdrawal
-11111111,1234,280,Deposit
+"11111111","11111111","100","Deposit"
+"11111111","11111111","90","Extract funds from bank account"
+"11111111","11111111","190","Deposit"
+"11111111","11111111","180","Extract funds from bank account"
