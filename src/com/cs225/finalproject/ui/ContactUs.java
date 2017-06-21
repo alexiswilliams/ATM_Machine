@@ -1,30 +1,27 @@
-package com.cs225.finalproject.driver;
+package com.cs225.finalproject.ui;
 
-import com.sun.xml.internal.ws.dump.LoggingDumpTube.Position;
-
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class Faq {
+public class ContactUs {
 	public static void display() {
 		Stage popUp = new Stage();
-		VBox pane = new VBox();
-		final String faqTitleString = "FAQ: Tool Tips";
-		final String faqString = "test";
-		Label faqTitle = new Label(faqTitleString);
-		Label faqLabel = new Label(faqString);
-		faqLabel.setWrapText(true);
-		faqLabel.setTextAlignment(TextAlignment.CENTER);
-		pane.getChildren().addAll(faqTitle, faqLabel);
-		pane.setAlignment(Pos.CENTER);
-
+		StackPane pane = new StackPane();
+		final String contactUsString = "This program was written by Paris Williams."
+				+ " If you have any questions about the program contact Paris Williams"
+				+ " at: willip27@my.erau.edu";
+		Label contactUsLabel = new Label(contactUsString);
+		contactUsLabel.setWrapText(true);
+		contactUsLabel.setTextAlignment(TextAlignment.CENTER);
+		pane.getChildren().add(contactUsLabel);
+		
+		
 		// block UI of other windows
 		popUp.initModality(Modality.APPLICATION_MODAL);
 		// disable resizing
