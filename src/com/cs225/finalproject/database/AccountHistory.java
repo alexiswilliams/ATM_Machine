@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,25 +11,17 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
 public class AccountHistory {
-	/*
-	 * acct###.txt
-	 * The individual account files should be formatted in the following way: 
-	ATM Card#<<comma>>ATM Pin#<<comma>> Balance<<comma>>Transaction 
-
-	 */
-	private int accountNumber;
-	private int accountPin;
-	private int balance;
-	private String transaction;
-	private ArrayList<AccountHistory> accountHistoryRecords;
+	private AccountHistoryData data;
+	private ArrayList<AccountHistoryData> accountHistoryRecords;
 	private CSVWriter writer;
 	private static final String ACCOUNT_HISTORY_FILE = "acct{0}.txt";
 	private static CSVReader reader;
+	private static String fileName;
 
 	private String getFileName(int acctNumber) {
 		return ACCOUNT_HISTORY_FILE.replace("{0}", String.valueOf(acctNumber));
 	}
-	
+
 	public void createAccountHistoryFile(int acctNumber) throws IOException {
 		writer = new CSVWriter(new FileWriter(getFileName(acctNumber)));
 
@@ -38,16 +29,16 @@ public class AccountHistory {
 
 		writer.close();	
 	}
-	
+
 	public AccountHistory() {}
-	
+
 	public AccountHistory(int acctNumber) {
 		accountHistoryRecords = new ArrayList<>();
-		
-		String fileName = getFileName(acctNumber);
-		
+
+		fileName = getFileName(acctNumber);
+
 		System.out.println("fileName: " + fileName);
-		
+
 		try {
 			reader = new CSVReader(new FileReader(fileName));
 
@@ -57,13 +48,13 @@ public class AccountHistory {
 			//Read CSV line by line and use the string array as you want
 			if(allRows != null && !allRows.isEmpty()) {
 				for(String[] row : allRows){
-					AccountHistory accountHistoryRecord = new AccountHistory(
+					AccountHistoryData accountHistoryRecord = new AccountHistoryData(
 							Integer.parseInt(row[0]), Integer.parseInt(row[1]), 
 							Integer.parseInt(row[2]), row[3]);
 					accountHistoryRecords.add(accountHistoryRecord);
 				}	
 			}
-			
+
 			reader.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -73,15 +64,26 @@ public class AccountHistory {
 			e.printStackTrace();
 		}
 	}
-	
-	public AccountHistory(int acctNumber, int acctPin, int bal, String transactionType) {
-		this.accountNumber = acctNumber;
-		this.accountPin = acctPin;
-		this.balance = bal;
-		this.transaction = transactionType;
+
+	public void updateAccountHistoryRecords(ArrayList<AccountHistoryData> newAccountHistoryRecords) throws IOException {
+		writer = new CSVWriter(new FileWriter(fileName, true));
+
+		for(AccountHistoryData newAccountHistoryRecord :newAccountHistoryRecords) {
+			String [] record = String.valueOf(newAccountHistoryRecord.getAccountNumber()).
+					concat(",").
+					concat(String.valueOf(newAccountHistoryRecord.getAccountPin())).
+					concat(",").
+					concat(String.valueOf(newAccountHistoryRecord.getBalance())).
+					concat(",").concat(newAccountHistoryRecord.getTransaction()).
+					split(",");
+
+			writer.writeNext(record);
+		}
+
+		writer.close();
 	}
-	
-	public ArrayList<AccountHistory> getAccountHistoryRecords() {
+
+	public ArrayList<AccountHistoryData> getAccountHistoryRecords() {
 		return accountHistoryRecords;
 	}
 
@@ -89,55 +91,55 @@ public class AccountHistory {
 	 * @return the accountNumber
 	 */
 	public int getAccountNumber() {
-		return accountNumber;
+		return data.getAccountNumber();
 	}
 
 	/**
 	 * @param accountNumber the accountNumber to set
 	 */
 	public void setAccountNumber(int accountNumber) {
-		this.accountNumber = accountNumber;
+		this.data.setAccountNumber(accountNumber);
 	}
 
 	/**
 	 * @return the accountPin
 	 */
 	public int getAccountPin() {
-		return accountPin;
+		return data.getAccountPin();
 	}
 
 	/**
 	 * @param accountPin the accountPin to set
 	 */
 	public void setAccountPin(int accountPin) {
-		this.accountPin = accountPin;
+		this.data.setAccountPin(accountPin);
 	}
 
 	/**
 	 * @return the balance
 	 */
 	public int getBalance() {
-		return balance;
+		return data.getBalance();
 	}
 
 	/**
 	 * @param balance the balance to set
 	 */
 	public void setBalance(int balance) {
-		this.balance = balance;
+		this.data.setBalance(balance);
 	}
 
 	/**
 	 * @return the transaction
 	 */
 	public String getTransaction() {
-		return transaction;
+		return data.getTransaction();
 	}
 
 	/**
 	 * @param transaction the transaction to set
 	 */
 	public void setTransaction(String transaction) {
-		this.transaction = transaction;
+		this.data.setTransaction(transaction);
 	}
 }
