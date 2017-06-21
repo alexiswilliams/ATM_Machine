@@ -31,7 +31,9 @@ public class Tests {
 			controller.createNewAccount(accountNumber, PIN_GOOD);
 		}
 		controller.deposit(100);
+		System.out.println("$" + controller.getAccountBalanace());
 		controller.withdraw(10);
+		System.out.println("$" + controller.getAccountBalanace());
 		controller.logout();
 		
 //		controller = new EagleBankController(acctNumber, acctPin)
