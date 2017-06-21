@@ -13,6 +13,7 @@ public class ContactUs {
 	public static void display() {
 		Stage popUp = new Stage();
 		StackPane pane = new StackPane();
+		final String contactUsTitle = "Contact Us";
 		final String contactUsString = "This program was written by Paris Williams."
 				+ " If you have any questions about the program contact Paris Williams"
 				+ " at: willip27@my.erau.edu";
@@ -21,13 +22,12 @@ public class ContactUs {
 		contactUsLabel.setTextAlignment(TextAlignment.CENTER);
 		pane.getChildren().add(contactUsLabel);
 		
-		
 		// block UI of other windows
 		popUp.initModality(Modality.APPLICATION_MODAL);
 		// disable resizing
 		popUp.setResizable(false);
 		// set title
-		popUp.setTitle("Contact Us");
+		popUp.setTitle(contactUsTitle);
 		// set size of window
 		Rectangle2D primaryScreeBounds = Screen.getPrimary().getVisualBounds();
 		popUp.setWidth(primaryScreeBounds.getWidth()*(1.0/2.0));

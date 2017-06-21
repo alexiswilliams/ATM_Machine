@@ -44,6 +44,8 @@ public class Account {
 				accounts.add(account);
 			}	
 		}
+		
+		reader.close();
 	}
 
 	public void createNewAccount(int acctNumber, int acctPin) throws DatabaseException, IOException {
@@ -58,7 +60,7 @@ public class Account {
 				throw new DatabaseException(Constants.ACCOUNT_NUMBER_LABEL + " must be unique");
 			}
 		}
-
+		System.out.println("Creating new account: " + acctNumber + " : " + acctPin);
 		writer = new CSVWriter(new FileWriter(EAGLE_BANK_ACCOUNTS_FILE, true));
 
 		String [] record = String.valueOf(acctNumber).concat(",").concat(String.valueOf(acctPin)).concat(",0").split(",");

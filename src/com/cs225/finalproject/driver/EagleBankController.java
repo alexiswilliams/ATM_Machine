@@ -1,12 +1,18 @@
 package com.cs225.finalproject.driver;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import com.cs225.finalproject.database.Account;
 import com.cs225.finalproject.database.AccountHistory;
 import com.cs225.finalproject.database.AccountHistoryData;
 import com.cs225.finalproject.database.DatabaseException;
+import com.cs225.finalproject.ui.getBalance;
 import com.cs225.finalproject.utils.Constants;
 
 public class EagleBankController {
@@ -54,12 +60,12 @@ public class EagleBankController {
 	public int withdraw(int amount) throws DatabaseException {
 		int currentBalance = getAccountBalanace();
 		
-		if(amount >= 1000) {
-			throw new DatabaseException("Withdrawal must be less than $1000.");
+		if(amount > 1000) {
+			throw new DatabaseException("Withdrawal must be no more than $1000.");
 		}
 		
-		if((double)amount / (double)currentBalance >= .7) {
-			throw new DatabaseException("Must withdraw less than 70% of current balance.");
+		if((double)amount / (double)currentBalance > .7) {
+			throw new DatabaseException("Must withdraw no more than 70% of current balance.");
 		}
 		
 		currentBalance = currentBalance - amount;
@@ -76,9 +82,10 @@ public class EagleBankController {
 		vault.createNewAccount(acctNumber, acctPin);
 	}
 	
-	public void login(int acctNumber, int acctPin) throws DatabaseException {
+	public void login(int acctNumber, int acctPin) throws DatabaseException, IOException {
 		this.accountNumber = acctNumber;
 		this.accountPin = acctPin;
+		vault = new Account();
 		
 		Account acct = vault.getAccount(acctNumber, acctPin);
 		
@@ -89,9 +96,34 @@ public class EagleBankController {
 	
 	public void logout() throws IOException {
 		AccountHistory accountVault = new AccountHistory(accountNumber);
+
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+		LocalDate localDate = LocalDate.now();
+		String currDate = dtf.format(localDate);
+		PrintStream fileStream = new PrintStream(new File("receipt" + currDate + ".txt"));
+		
+		fileStream.println("Date:\t" + currDate);
+		fileStream.println(getCurrentTransactions());
+		fileStream.println(Constants.ACCOUNT_PIN_LABEL + ":\tXXXXX" + String.valueOf(getAccountNumber()).substring(5, 8));
+		fileStream.println(Constants.CURRENT_BALANCE + "\t" + getAccountBalanace());
+		fileStream.flush();
+		fileStream.close();
+		
 		accountVault.updateAccountHistoryRecords(currentTransactions);
 		this.accountNumber = 0;
 		this.accountPin = 0;
+		vault = new Account();
+	}
+	
+	public String getCurrentTransactions() {
+		String currTransactions = "";
+		System.out.println(currentTransactions.size());
+		
+		for(AccountHistoryData record :currentTransactions) {
+			currTransactions = currTransactions + record.getTransaction() + "\t" + String.valueOf(record.getBalance()) + "\n";
+		}
+		
+		return currTransactions;
 	}
 	
 	public void transfer(int amount, int acctNumberFrom, int acctPinFrom, int acctNumberTo, int acctPinTo) throws DatabaseException, IOException {

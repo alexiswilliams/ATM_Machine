@@ -1,2 +1,0 @@
-"82400574","1234","100","Deposit"
-"82400574","1234","90","Extract funds from bank account"
