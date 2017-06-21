@@ -46,4 +46,6 @@ public class Constants {
 	public static final String OK_LABEL = "Ok";
 	public static final String CANCEL_HELP = "Go back to the Main Scene";
 	public static final String MAIN_MENU_LABEL = "Main Menu";
+	public static final String CURRENT_BALANCE = "Current Balance";
+	public static final String CURRENT_BALANCE_HELP = "View the " + CURRENT_BALANCE.toLowerCase() + " of account";
 }
