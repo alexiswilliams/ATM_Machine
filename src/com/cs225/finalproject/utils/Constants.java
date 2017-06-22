@@ -43,9 +43,11 @@ public class Constants {
 	public static final String TRANSFER_AMOUNT_LABEL = "Amount of Transfer";
 	public static final String ACCOUNT_NUMBER_LABEL_NEW = "New " + ACCOUNT_NUMBER_LABEL;
 	public static final String ACCOUNT_PIN_LABEL_NEW = "New " + ACCOUNT_PIN_LABEL;
-	public static final String OK_LABEL = "Ok";
+	public static final String OK_LABEL = "OK";
 	public static final String CANCEL_HELP = "Go back to the Main Scene";
 	public static final String MAIN_MENU_LABEL = "Main Menu";
 	public static final String CURRENT_BALANCE = "Current Balance";
 	public static final String CURRENT_BALANCE_HELP = "View the " + CURRENT_BALANCE.toLowerCase() + " of account";
+	public static final String DEPOSIT_VALUE_ERROR_MESSAGE = "Deposit must be greater than $0.";
+	public static final String DEPOSIT_INVALID_INPUT_ERROR_MESSAGE = "Deposit must be a number.";
 }

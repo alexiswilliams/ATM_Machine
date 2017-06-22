@@ -33,6 +33,7 @@ import javafx.stage.Stage;
 //@SuppressWarnings("unused")
 public class MainStage extends Application {
 
+
 	private EagleBankController controller;
 
 	public MainStage() throws IOException {
@@ -140,16 +141,13 @@ public class MainStage extends Application {
 		VBox menuButtons = new VBox(20);
 		VBox statusBar = new VBox();
 		BorderPane mainMenuLayout = new BorderPane();
-		
+
 		// initializing Labels
 		mainMenuLabel = new Label(Constants.MAIN_MENU_LABEL);
-		// TODO insert stub method to add user accountNumber
 		accountNumberLabel = new Label("Account Number: " + controller.getAccountNumber());
-		// TODO insert stub method to add currentBalance
 		currentBalanceLabel = new Label("$ " + controller.getAccountBalanace());
-		// TODO insert stub method to add getTransactionHistory(history);
 		currentTransactionHistory = new Label(controller.getCurrentTransactions());
-		
+
 		// initializing Buttons
 		changePinButton = createButton(Constants.CHANGE_PIN_LABEL, Constants.CHANGE_PIN_HELP);
 		createNewAccountButton = createButton(Constants.CREATE_NEW_ACCOUNT_LABEL, Constants.CREATE_ACCOUNT_HELP);
@@ -158,7 +156,7 @@ public class MainStage extends Application {
 		withdrawalButton = createButton(Constants.WITHDRAWAL_LABEL, Constants.WITHDRAWAL_HELP);
 		transferFundsButton = createButton(Constants.TRANSFER_FUNDS_LABEL, Constants.TRANSFER_FUNDS_HELP);
 		currentBalance = createButton(Constants.CURRENT_BALANCE, Constants.CURRENT_BALANCE_HELP);
-		
+
 		// create event handlers
 		changePinButton.setOnAction(changePin -> mainStage.setScene(getChangePinScene(mainStage)));
 		depositButton.setOnAction(deposit -> mainStage.setScene(getDepositScene(mainStage)));
@@ -173,41 +171,41 @@ public class MainStage extends Application {
 				ErrorMessage.display(e1.getMessage());
 			}
 		});
-		createNewAccountButton.setOnAction(e -> mainStage.setScene(getCreateNewAccount(mainStage)));
+		createNewAccountButton.setOnAction(createNewAccount -> mainStage.setScene(getCreateNewAccount(mainStage)));
 		withdrawalButton.setOnAction(withdrawal -> mainStage.setScene(getWithdrawalScene(mainStage)));
 		transferFundsButton.setOnAction(transferFunds -> mainStage.setScene(getTransferFundsScene(mainStage)));
 		currentBalance.setOnAction(balance -> mainStage.setScene(getCurrentBalanceScreen(mainStage)));
-		
+
 		// assigning buttons to VBox panes
 		optionButtons.getChildren().addAll(currentBalance, changePinButton, createNewAccountButton, logOutButton);
 		menuButtons.getChildren().addAll(mainMenuLabel, depositButton, withdrawalButton, transferFundsButton);
 		statusBar.getChildren().addAll(accountNumberLabel, currentBalanceLabel, currentTransactionHistory);
-		
+
 		// align VBox in the center of their locations
 		optionButtons.setAlignment(Pos.CENTER);
 		menuButtons.setAlignment(Pos.CENTER);
 		statusBar.setAlignment(Pos.TOP_LEFT);
-		
+
 		// embedding VBox panes into BorderPane
 		mainMenuLayout.setTop(getMenuBarLoggedIn(mainStage));
 		mainMenuLayout.setLeft(optionButtons);
 		mainMenuLayout.setCenter(menuButtons);
 		mainMenuLayout.setRight(statusBar);
-		
+
 		Scene scene = new Scene(mainMenuLayout);
-		
+
 		return scene;
 	}
-	
+
 	private Scene getCurrentBalanceScreen(Stage mainStage) {
 		Button okButton;
 		Label currentBalanceLabel, currentBalanceOutput;
-		
+
 		okButton = new Button(Constants.OK_LABEL);
 
 		// Create labels for login scene
-		currentBalanceLabel = new Label(Constants.CURRENT_BALANCE);
-		currentBalanceOutput = new Label(String.valueOf(controller.getAccountBalanace()));
+		currentBalanceLabel = new Label(Constants.CURRENT_BALANCE+ ":");
+		currentBalanceOutput = new Label("$" + String.valueOf(controller.getAccountBalanace()));
 
 		GridPane grid = getGridPane();
 
@@ -220,7 +218,6 @@ public class MainStage extends Application {
 				currentBalanceLabel, currentBalanceOutput, okButton);
 
 		// event handler
-		
 		okButton.setOnAction(ok -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
@@ -231,7 +228,7 @@ public class MainStage extends Application {
 
 		return scene;
 	}
-	
+
 	private Scene getDepositScene(Stage mainStage) {
 		Button confirmButton, cancelButton;
 		Label depositAmountLabel;
@@ -258,13 +255,25 @@ public class MainStage extends Application {
 				depositAmountLabel, depositAmountInput, confirmButton, cancelButton);
 
 		// event handler
+		/*
+		 * confirmButton.setOnAction(e -> {
+		 * //			buildScene(Constants.DEPOSIT_LABEL);
+		 * //			updateTopBorder(menuBar);
+		 * controller.deposit(Integer.valueOf(depositAmountInput.getText()));
+		 * mainStage.setScene(getMainMenuScene(mainStage));
+		 * });
+		 */
 		confirmButton.setOnAction(e -> {
-			//			buildScene(Constants.DEPOSIT_LABEL);
-			//			updateTopBorder(menuBar);
-			controller.deposit(Integer.valueOf(depositAmountInput.getText()));
-			mainStage.setScene(getMainMenuScene(mainStage));
+			try {
+				controller.deposit(Integer.parseInt(depositAmountInput.getText()));
+				mainStage.setScene(getMainMenuScene(mainStage));
+			} catch (DatabaseException e1) {
+				ErrorMessage.display(e1.getMessage());
+			} catch (NumberFormatException e2) {
+				ErrorMessage.display("Deposit can only contain numbers.");
+			}
 		});
-		
+
 		cancelButton.setOnAction(cancel -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
@@ -308,7 +317,7 @@ buttons:
 
 		// text prompt
 		withdrawalAmountInput.setPromptText(Constants.WITHDRAWAL_AMOUNT_LABEL);
-		
+
 		// update value when clicking preset value buttons
 		twentyButton.setOnMouseClicked(e -> {
 			withdrawalAmountInput.setText("20");
@@ -328,7 +337,7 @@ buttons:
 		twoHundredButton.setOnMouseClicked(e -> {
 			withdrawalAmountInput.setText("200");
 		});
-		
+
 		GridPane grid = getGridPane();
 
 		// assign nodes to GridPane
@@ -352,10 +361,13 @@ buttons:
 			try {
 				controller.withdraw(Integer.parseInt(withdrawalAmountInput.getText()));
 				mainStage.setScene(getMainMenuScene(mainStage));
-			} catch (NumberFormatException | DatabaseException e1) {
+			} catch (DatabaseException e1) {
 				ErrorMessage.display(e1.getMessage());
+			} catch (NumberFormatException e2) {
+				ErrorMessage.display("Withdrawal can only contain numbers.");
 			}
 		});
+
 		cancelButton.setOnAction(cancel -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
@@ -410,10 +422,6 @@ buttons:
 				cancelButton, confirmButton);
 
 		// event handler
-		//		loginButton.setOnAction(e -> {
-		//			//			buildScene(Constants.DEPOSIT_LABEL);
-		//			//			updateTopBorder(menuBar);
-		//		});
 		cancelButton.setOnAction(cancel -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
@@ -425,15 +433,22 @@ buttons:
 		return scene;
 	}
 
-	private Scene getViewTransactionHistoryScene() {
-
-		return null;
+	private Scene getViewTransactionHistoryScene(Stage mainStage) {
+		Button okButton;
+		Label transactionHistory, sceneTitle;
+		VBox transaction = new VBox(10);
+		
+		okButton = new Button(Constants.OK_LABEL);
+		transactionHistory = new Label(controller.displayTransactionHistory());
+		sceneTitle = new Label(Constants.VIEW_TRANSACTION_HISTORY_LABEL);
+		transaction.getChildren().addAll(sceneTitle, transactionHistory, okButton);
+		
+		// event handler
+		okButton.setOnAction(ok -> mainStage.setScene(getMainMenuScene(mainStage)));
+		
+		Scene scene = new Scene(transaction);
+		return scene;
 	}
-
-//	private Scene getCurrentBalanceScene() {
-//
-//		return null;
-//	}
 
 	private Scene getChangePinScene(Stage mainStage) {
 		// Nodes needed for scene: buttons, labels, text fields
@@ -473,6 +488,7 @@ buttons:
 			//			buildScene(Constants.DEPOSIT_LABEL);
 			//			updateTopBorder(menuBar);
 		});
+
 		cancelButton.setOnAction(cancel -> mainStage.setScene(getMainMenuScene(mainStage)));
 
 		BorderPane borderPane = new BorderPane();
@@ -585,6 +601,8 @@ buttons:
 		changePinMenuItem.setOnAction(changePin -> mainStage.setScene(getChangePinScene(mainStage)));
 		// change scene to create new account scene
 		createNewAccountMenuItem.setOnAction(e -> mainStage.setScene(getCreateNewAccount(mainStage)));
+		// display entire transaction history
+		viewTransactionHistoryMenuItem.setOnAction(e -> mainStage.setScene(getViewTransactionHistoryScene(mainStage)));
 		// display contact scene
 		contactUsMenuItem.setOnAction(contactUs -> ContactUs.display());
 		// display faq scene
@@ -635,24 +653,18 @@ buttons:
 		mainStage.setResizable(false);
 		mainStage.setOnCloseRequest(e -> e.consume());
 
-		Scene loginScene = getLoginScene(mainStage);
-		Scene depositScene = getDepositScene(mainStage);
-		Scene transferFundsScene = getTransferFundsScene(mainStage);
-		Scene changePinScene = getChangePinScene(mainStage);
-		Scene createNewAccount = getCreateNewAccount(mainStage);
-		Scene withdrawalScene = getWithdrawalScene(mainStage);
-		Scene mainMenuScene = getMainMenuScene(mainStage);
+//		Scene loginScene = getLoginScene(mainStage);
+//		Scene depositScene = getDepositScene(mainStage);
+//		Scene transferFundsScene = getTransferFundsScene(mainStage);
+//		Scene changePinScene = getChangePinScene(mainStage);
+//		Scene createNewAccount = getCreateNewAccount(mainStage);
+//		Scene withdrawalScene = getWithdrawalScene(mainStage);
+//		Scene mainMenuScene = getMainMenuScene(mainStage);
 
-		// Add the menubar and shapes 
-		//		borderPane.setTop(menuBar);
 		mainStage.setWidth(primaryScreenBounds.getWidth() * (3.0/4.0));
 		mainStage.setHeight(primaryScreenBounds.getHeight() * (3.0/4.0));
-		mainStage.setScene(loginScene);
+		mainStage.setScene(getLoginScene(mainStage));
 		mainStage.show();
 	}
-
-	//	private void updateTopBorder(MenuBar menuBar) {
-	//		borderPane.setTop(menuBar);
-	//	}
 }
 

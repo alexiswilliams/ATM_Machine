@@ -45,8 +45,12 @@ public class EagleBankController {
 		return currBalance;
 	}
 	
-	public int deposit(int amount) {
+	public int deposit(int amount) throws DatabaseException{
 		int currentBalance = getAccountBalanace();
+		
+		if (amount <= 0) {
+			throw new DatabaseException("Deposit must be greater than $0.");
+		}
 		
 		currentBalance = currentBalance + amount;
 		
@@ -60,12 +64,16 @@ public class EagleBankController {
 	public int withdraw(int amount) throws DatabaseException {
 		int currentBalance = getAccountBalanace();
 		
-		if(amount > 1000) {
+		if (amount > 1000) {
 			throw new DatabaseException("Withdrawal must be no more than $1000.");
 		}
 		
-		if((double)amount / (double)currentBalance > .7) {
+		if ((double)amount / (double)currentBalance > .7) {
 			throw new DatabaseException("Must withdraw no more than 70% of current balance.");
+		}
+		
+		if (amount <= 0) {
+			throw new DatabaseException("Withdrawal must be greater than $0.");
 		}
 		
 		currentBalance = currentBalance - amount;
@@ -116,14 +124,25 @@ public class EagleBankController {
 	}
 	
 	public String getCurrentTransactions() {
-		String currTransactions = "";
-		System.out.println(currentTransactions.size());
+		return getTransactions(currentTransactions);
+	}
+	
+	public String getTransactions(ArrayList<AccountHistoryData> records) {
+		String transactions = "";
+		System.out.println(records.size());
 		
-		for(AccountHistoryData record :currentTransactions) {
-			currTransactions = currTransactions + record.getTransaction() + "\t" + String.valueOf(record.getBalance()) + "\n";
+		for(AccountHistoryData record :records) {
+			transactions = transactions + record.getTransaction() + "\t" + String.valueOf(record.getBalance()) + "\n";
 		}
 		
-		return currTransactions;
+		return transactions;
+	}
+	
+	public String displayTransactionHistory() {
+		AccountHistory accountVault = new AccountHistory(accountNumber);
+		String transactions = getTransactions(accountVault.getAccountHistoryRecords());
+		transactions = transactions + getCurrentTransactions();
+		return transactions;
 	}
 	
 	public void transfer(int amount, int acctNumberFrom, int acctPinFrom, int acctNumberTo, int acctPinTo) throws DatabaseException, IOException {
