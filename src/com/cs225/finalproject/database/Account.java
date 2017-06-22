@@ -47,6 +47,41 @@ public class Account {
 		
 		reader.close();
 	}
+	
+	public void updateAccountPin(int acctNumberCurr, int acctPinCurr, int acctPinNew) throws DatabaseException, IOException {
+		for(Account acct :accounts) {
+			if(acct.getAccountNumber() == acctNumberCurr && acct.getAccountPin() != acctPinCurr) {
+				throw new DatabaseException(Constants.ACCOUNT_PIN_LABEL + " does not match the current PIN for your account.");
+			}
+		}
+		
+		if(acctPinCurr == acctPinNew) {
+			throw new DatabaseException(Constants.ACCOUNT_PIN_LABEL + " values match.");
+		}
+
+		if(!Validation.hasValidPinNumber(acctPinNew)) {
+			throw new DatabaseException(Constants.ACCOUNT_PIN_LABEL + " must be 4 digits long");
+		}
+		
+		writer = new CSVWriter(new FileWriter(EAGLE_BANK_ACCOUNTS_FILE));
+		int acctNumber, acctPin, numberTransactions;
+		
+		for(Account acct :accounts) {
+			acctNumber = acct.getAccountNumber();
+			acctPin = acct.getAccountPin();
+			numberTransactions = acct.getNumberOfTransactions();
+			
+			if(acct.getAccountNumber() == acctNumberCurr) {
+				acctPin = acctPinNew;
+			}
+			
+			String [] record = String.valueOf(acctNumber).concat(",").concat(String.valueOf(acctPin)).concat(",").concat(String.valueOf(numberTransactions)).split(",");
+
+			writer.writeNext(record);
+		}
+		
+		writer.close();
+	}
 
 	public void createNewAccount(int acctNumber, int acctPin) throws DatabaseException, IOException {
 		if(!Validation.hasValidAccountNumber(acctNumber)) {

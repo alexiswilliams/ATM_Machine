@@ -34,6 +34,10 @@ public class Tests {
 		System.out.println("$" + controller.getAccountBalanace());
 		controller.withdraw(10);
 		System.out.println("$" + controller.getAccountBalanace());
+		
+		Account vault = new Account();
+		vault.updateAccountPin(accountNumber, PIN_GOOD, 9999);
+		
 		controller.logout();
 		
 //		controller = new EagleBankController(acctNumber, acctPin)
